@@ -29,19 +29,48 @@ func (a *App) Greet(name string) string {
 }
 
 func (a *App) SetDatabase() string {
-	selection, _ := runtime.OpenFileDialog(a.ctx, runtime.OpenDialogOptions{
+	selection, err := runtime.OpenFileDialog(a.ctx, runtime.OpenDialogOptions{
 		Title: "Select File",
 		Filters: []runtime.FileFilter{
 			{
-				DisplayName: "Images (*.png;*.jpg)",
-				Pattern:     "*.png;*.jpg",
-			}, {
-				DisplayName: "Videos (*.mov;*.mp4)",
-				Pattern:     "*.mov;*.mp4",
+				DisplayName: "Database File (*.db;*.sqlite)",
+				Pattern:     "*.db;*.sqlite",
 			},
 		},
 	})
+
+	if err != nil {
+		return "Error"
+	}
+
+	print("\n Selection")
 	print(selection)
+	print("\n ")
+
+	// OpenDirectoryDialog()
+	return "Hello"
+	// return fmt.Sprintf("Hello %s, It's show time!", name)
+}
+
+func (a *App) CreateDatabase() string {
+
+	selection, err := runtime.SaveFileDialog(a.ctx, runtime.SaveDialogOptions{
+		Title: "Create Database",
+		Filters: []runtime.FileFilter{
+			{
+				DisplayName: "Database File (*.db;*.sqlite)",
+				Pattern:     "*.db;*.sqlite",
+			},
+		},
+	})
+
+	if err != nil {
+		return "Error"
+	}
+
+	print("\n Selection")
+	print(selection)
+	print("\n ")
 
 	// OpenDirectoryDialog()
 	return "Hello"
