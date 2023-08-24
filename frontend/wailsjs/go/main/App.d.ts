@@ -5,4 +5,6 @@ export function CreateDatabase():Promise<string>;
 
 export function Greet(arg1:string):Promise<string>;
 
+export function SelectImageFolder():Promise<string>;
+
 export function SetDatabase():Promise<string>;

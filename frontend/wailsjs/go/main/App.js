@@ -10,6 +10,10 @@ export function Greet(arg1) {
   return window['go']['main']['App']['Greet'](arg1);
 }
 
+export function SelectImageFolder() {
+  return window['go']['main']['App']['SelectImageFolder']();
+}
+
 export function SetDatabase() {
   return window['go']['main']['App']['SetDatabase']();
 }

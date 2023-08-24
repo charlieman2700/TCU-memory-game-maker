@@ -7,7 +7,7 @@ export const Home = () => {
     <div className="bg-secondary flex flex-col h-screen items-center justify-center">
       <LogoSplash />
       <Link
-        className="hover:cursor-pointer mt-4 text-white bg-cyan-800 w-[26rem]  py-1 text-center rounded "
+        className="hover:cursor-pointer mt-4 text-white bg-cyan-800 w-[26rem]  py-1 text-center rounded hover:bg-cyan-500 transition-all"
         to="/selectDatabase"
       >
         Start

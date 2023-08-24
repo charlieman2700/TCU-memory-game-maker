@@ -1,28 +1,43 @@
-// import { SelectDatabase Greet} from "../wailsjs/go/main/App";
-
+import { redirect, useNavigate } from "react-router-dom";
 import { CreateDatabase, SetDatabase } from "../../wailsjs/go/main/App";
+import { Button } from "../Components/Button";
+import { LogoSplash } from "../Components/LogoSplash";
 
-// 
+//
 export const SelectDatabase = () => {
-
-
-  async function handleClickSetDatabae(){
+  const navigate = useNavigate();
+  async function handleClickSetDatabae() {
     const result = await SetDatabase();
+    if (result == "OK") {
+      navigate("/selectImageFolder");
+    }
   }
 
-  async function handleClickCreateDatabase(){
+  async function handleClickCreateDatabase() {
     const result = await CreateDatabase();
+    if (result == "OK") {
+      navigate("/selectImageFolder");
+    }
   }
 
   return (
-    <div className="bg-secondary flex h-screen flex-col justify-center items-center">
-      SelectDatabase
-      <button onClick={handleClickSetDatabae}  className="bg-cyan-800 text-white rounded w-3/12 px-2">
-        Select Database file
-      </button>
-      <button onClick={handleClickCreateDatabase }  className="bg-cyan-800 text-white rounded px-2">
-        Create New Database file
-      </button>
+    <div className="flex h-screen flex-col  items-center  justify-center bg-secondary  ">
+      <div className="">
+        <LogoSplash />
+      </div>
+      <div className=" flex flex-col items-center justify-center">
+        <h1 className="mt-2  text-3xl font-bold text-cyan-900 ">
+          Select database
+        </h1>
+
+        <div className="mt-4 flex flex-col items-center justify-center">
+          <Button onClick={handleClickSetDatabae}>Select Database file</Button>
+          <span className="font-semibold text-cyan-900">or</span>
+          <Button onClick={handleClickCreateDatabase}>
+            Create New Database file
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"dev.com/tcu/database"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
@@ -39,16 +40,24 @@ func (a *App) SetDatabase() string {
 		},
 	})
 
-	if err != nil {
+	if err != nil || selection == "" {
+		runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
+			Type:    runtime.InfoDialog,
+			Title:   "Database selection error",
+			Message: "We coulnt mount database selected pls,try again",
+		})
 		return "Error"
 	}
 
-	print("\n Selection")
-	print(selection)
-	print("\n ")
+	runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
+		Type:    runtime.InfoDialog,
+		Title:   "Database Selection",
+		Message: "Database Selected Correctly",
+	})
+	println(selection)
 
 	// OpenDirectoryDialog()
-	return "Hello"
+	return "OK"
 	// return fmt.Sprintf("Hello %s, It's show time!", name)
 }
 
@@ -64,15 +73,36 @@ func (a *App) CreateDatabase() string {
 		},
 	})
 
-	if err != nil {
-		return "Error"
+	_, creationError := database.CreateNewDatabase(selection)
+	if err != nil || creationError != nil {
+
+		runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
+			Type:    runtime.InfoDialog,
+			Title:   "Database selection error",
+			Message: "Error Crearing Database, try again. If error persist try on another location",
+		})
+		return "ERR"
 	}
 
-	print("\n Selection")
-	print(selection)
-	print("\n ")
+	return "OK"
+}
 
-	// OpenDirectoryDialog()
-	return "Hello"
-	// return fmt.Sprintf("Hello %s, It's show time!", name)
+func (a *App) SelectImageFolder() string {
+
+	selection, err := runtime.OpenDirectoryDialog(a.ctx, runtime.OpenDialogOptions{
+		Title: "Select Image Folder",
+	})
+
+	if err != nil {
+		runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
+			Type:    runtime.InfoDialog,
+			Title:   "Folder selection error",
+			Message: "Error selecting image folder, try again. If error persist try on another location",
+		})
+
+	}
+
+	println(selection)
+
+	return "OK"
 }
