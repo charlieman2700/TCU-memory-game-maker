@@ -1,33 +1,10 @@
-package main
+package app
 
 import (
-	"context"
-	"fmt"
+	"tcu/src/database"
 
-	"dev.com/tcu/database"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
-
-// App struct
-type App struct {
-	ctx context.Context
-}
-
-// NewApp creates a new App application struct
-func NewApp() *App {
-	return &App{}
-}
-
-// startup is called when the app starts. The context is saved
-// so we can call the runtime methods
-func (a *App) startup(ctx context.Context) {
-	a.ctx = ctx
-}
-
-// Greet returns a greeting for the given name
-func (a *App) Greet(name string) string {
-	return fmt.Sprintf("Hello %s, It's show time!", name)
-}
 
 func (a *App) SetDatabase() string {
 	selection, err := runtime.OpenFileDialog(a.ctx, runtime.OpenDialogOptions{
@@ -40,13 +17,17 @@ func (a *App) SetDatabase() string {
 		},
 	})
 
-	if err != nil || selection == "" {
+	if err != nil {
 		runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
 			Type:    runtime.InfoDialog,
 			Title:   "Database selection error",
 			Message: "We coulnt mount database selected pls,try again",
 		})
 		return "Error"
+	}
+
+	if selection == "" {
+		return "NO_ACTION"
 	}
 
 	runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
@@ -72,6 +53,10 @@ func (a *App) CreateDatabase() string {
 			},
 		},
 	})
+
+	if selection == "" {
+		return "NO_ACTION"
+	}
 
 	_, creationError := database.CreateNewDatabase(selection)
 	if err != nil || creationError != nil {
@@ -99,10 +84,14 @@ func (a *App) SelectImageFolder() string {
 			Title:   "Folder selection error",
 			Message: "Error selecting image folder, try again. If error persist try on another location",
 		})
-
+		return "ERR"
 	}
 
-	println(selection)
+	if selection == "" {
+		return "NO_ACTION"
+	}
+
+	a.imagePath = selection
 
 	return "OK"
 }

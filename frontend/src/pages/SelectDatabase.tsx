@@ -1,5 +1,5 @@
 import { redirect, useNavigate } from "react-router-dom";
-import { CreateDatabase, SetDatabase } from "../../wailsjs/go/main/App";
+import { CreateDatabase, SetDatabase } from "../../wailsjs/go/app/App";
 import { Button } from "../Components/Button";
 import { LogoSplash } from "../Components/LogoSplash";
 

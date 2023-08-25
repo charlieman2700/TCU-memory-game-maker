@@ -1,4 +1,4 @@
-module dev.com/tcu
+module tcu
 
 go 1.18
 
