@@ -37,6 +37,8 @@ func (a *App) SetDatabase() string {
 	})
 	println(selection)
 
+	database.LoadDatabase(selection)
+
 	// OpenDirectoryDialog()
 	return "OK"
 	// return fmt.Sprintf("Hello %s, It's show time!", name)

@@ -6,6 +6,18 @@ export function CreateDatabase() {
   return window['go']['app']['App']['CreateDatabase']();
 }
 
+export function CreateNewCategory(arg1) {
+  return window['go']['app']['App']['CreateNewCategory'](arg1);
+}
+
+export function EraseCategory(arg1) {
+  return window['go']['app']['App']['EraseCategory'](arg1);
+}
+
+export function LoadCategories(arg1, arg2) {
+  return window['go']['app']['App']['LoadCategories'](arg1, arg2);
+}
+
 export function SelectImageFolder() {
   return window['go']['app']['App']['SelectImageFolder']();
 }

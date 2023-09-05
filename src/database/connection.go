@@ -50,7 +50,7 @@ func CreateNewDatabase(path string) (*gorm.DB, error) {
 	return database, nil
 }
 
-func GetInstance(path string) *gorm.DB {
+func LoadDatabase(path string) *gorm.DB {
 
 	if database == nil {
 		lock.Lock()
@@ -68,5 +68,9 @@ func GetInstance(path string) *gorm.DB {
 	} else {
 		fmt.Println("Single instance already created.")
 	}
+	return database
+}
+
+func GetDatabase() *gorm.DB {
 	return database
 }

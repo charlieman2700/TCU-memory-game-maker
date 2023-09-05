@@ -3,6 +3,12 @@
 
 export function CreateDatabase():Promise<string>;
 
+export function CreateNewCategory(arg1:string):Promise<string>;
+
+export function EraseCategory(arg1:number):Promise<string>;
+
+export function LoadCategories(arg1:number,arg2:number):Promise<string>;
+
 export function SelectImageFolder():Promise<string>;
 
 export function SetDatabase():Promise<string>;
