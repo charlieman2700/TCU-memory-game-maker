@@ -1,4 +1,4 @@
-import { AdminLayout } from "../../layouts/AdminLayout";
+import { AdminLayout } from "../../../layouts/AdminLayout";
 import { Button, getKeyValue, Input } from "@nextui-org/react";
 import {
   Table,
@@ -13,12 +13,17 @@ import {
   CreateNewCategory,
   EraseCategory,
   LoadCategories,
-} from "../../../wailsjs/go/app/App";
-import { Category } from "../../models";
+} from "../../../../wailsjs/go/app/App";
+import { Category } from "../../../models";
+import { useNavigate } from "react-router-dom";
 
 export const Categories = () => {
+
+
   const [page, setPage] = useState(1);
   const rowsPerPage = 20;
+  const navigate = useNavigate();
+  
 
   useEffect(() => {
     loadCategories();
@@ -45,6 +50,10 @@ export const Categories = () => {
     setNewCategory("");
     loadCategories();
   };
+
+  const handleEditClick = (categoryId: number) => {
+    navigate(`edit/${categoryId}`)
+  }
 
   const handleEraseCategory = async (categoryId: number) => {
     const response = await EraseCategory(categoryId);
@@ -89,7 +98,7 @@ export const Categories = () => {
               <TableCell>{category.ID}</TableCell>
               <TableCell>{category.Title}</TableCell>
               <TableCell>
-                <Button className=" " size="sm" color="success">
+                <Button onClick={()=>handleEditClick(category.ID)} size="sm" color="success">
                   Edit
                 </Button>
               </TableCell>

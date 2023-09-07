@@ -86,3 +86,40 @@ func (a *App) EraseCategory(id int) string {
 
 	return "OK"
 }
+
+func (a *App) EditCategory(id int, newTitle string) string {
+	db := database.GetDatabase()
+
+	var category database.Category
+	db.First(&category, id)
+	if category.ID == 0 {
+		runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
+			Type:    runtime.InfoDialog,
+			Title:   "Database Error",
+			Message: "Category doesn't exist",
+		})
+		return "ERROR_EDITING"
+	}
+
+	category.Title = newTitle
+	db.Save(&category)
+	return "OK"
+}
+
+func (a *App) LoadCategoryName(id int) string {
+	db := database.GetDatabase()
+
+	var category database.Category
+	db.First(&category, id)
+	if category.ID == 0 {
+		runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
+			Type:    runtime.InfoDialog,
+			Title:   "Database Error",
+			Message: "Category doesn't exist",
+		})
+		return "ERROR_EDITING"
+	}
+
+	return category.Title
+
+}
