@@ -1,5 +1,5 @@
-import { Button, Input, Spacer, Table, TableHeader } from "@nextui-org/react";
-import React, { useEffect, useState } from "react";
+import { Button, Input } from "@nextui-org/react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { LoadCategoryName } from "../../../../wailsjs/go/app/App";
 import { AdminLayout } from "../../../layouts/AdminLayout";
@@ -23,7 +23,11 @@ export const EditCategory = () => {
     setInfo();
   }, []);
 
-  const handleCreateCategory = async () => {
+  const handleEditCategory = async () => {
+    if (newCategory === "") {
+      return;
+    }
+
     const result = await EC(Number(params.id), newCategory);
     if (result == "OK") {
       navigate("../");
@@ -37,7 +41,7 @@ export const EditCategory = () => {
 
   return (
     <AdminLayout title="Edit Category">
-      <form onSubmit={handleCreateCategory}>
+      <form onSubmit={handleEditCategory}>
         <Input
           value={newCategory}
           aria-labelledby="Enter new Category name"
