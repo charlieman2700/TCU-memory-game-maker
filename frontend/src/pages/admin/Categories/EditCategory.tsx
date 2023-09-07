@@ -41,7 +41,7 @@ export const EditCategory = () => {
 
   return (
     <AdminLayout title="Edit Category">
-      <form onSubmit={handleEditCategory}>
+      <form className="flex flex-col" onSubmit={handleEditCategory}>
         <Input
           value={newCategory}
           aria-labelledby="Enter new Category name"
@@ -49,7 +49,7 @@ export const EditCategory = () => {
           type="text"
           placeholder={title}
         />
-        <div className="flex gap-3">
+        <div className=" ml-auto flex gap-3">
           <Button type="submit" className="mt-2" size="sm" color="primary">
             Change Name
           </Button>

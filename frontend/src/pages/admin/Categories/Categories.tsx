@@ -65,7 +65,7 @@ export const Categories = () => {
 
   return (
     <AdminLayout title="Categories">
-      <form onSubmit={handleCreateCategory}>
+      <form className="flex flex-col" onSubmit={handleCreateCategory}>
         <Input
           value={newCategory}
           aria-labelledby="Enter new Category name"
@@ -73,7 +73,7 @@ export const Categories = () => {
           type="text"
           placeholder="Enter new Category name"
         />
-        <Button type="submit" className="mt-2" size="sm" color="primary">
+        <Button type="submit" className="mt-2 ml-auto " size="sm" color="primary">
           Add new category
         </Button>
       </form>
