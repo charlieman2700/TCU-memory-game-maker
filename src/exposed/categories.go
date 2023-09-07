@@ -87,11 +87,26 @@ func (a *App) EraseCategory(id int) string {
 	return "OK"
 }
 
-func (a *App) EditCategory(id int, newTitle string) string {
+func (a *App) EditCategory(id uint, newTitle string) string {
 	db := database.GetDatabase()
 
 	var category database.Category
+
+	var categoryWithSameTitle database.Category
+
+	db.Where("title = ?", newTitle).First(&categoryWithSameTitle)
+
+	if categoryWithSameTitle.ID != 0 {
+		runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
+			Type:    runtime.InfoDialog,
+			Title:   "Database Error",
+			Message: "There is another category with the same title",
+		})
+		return "CATEGORY_EXISTS"
+	}
+
 	db.First(&category, id)
+
 	if category.ID == 0 {
 		runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
 			Type:    runtime.InfoDialog,
