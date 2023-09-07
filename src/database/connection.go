@@ -6,6 +6,8 @@ import (
 	"regexp"
 	"sync"
 
+	"tcu/src/environment"
+
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -13,6 +15,23 @@ import (
 var lock = &sync.Mutex{}
 
 var database *gorm.DB
+
+func DevDatabase() {
+	if environment.DEV_ENV {
+		path := "./dev.db"
+		_, error := os.Stat(path)
+
+		// check if error is "file not exists"
+		if os.IsNotExist(error) {
+			println("Entra en crear")
+			CreateNewDatabase(path)
+		} else {
+			println("Entra en cargar")
+			LoadDatabase(path)
+		}
+
+	}
+}
 
 func CreateNewDatabase(path string) (*gorm.DB, error) {
 	if database == nil {
@@ -30,8 +49,6 @@ func CreateNewDatabase(path string) (*gorm.DB, error) {
 				return nil, err
 			}
 			defer f.Close()
-
-			fmt.Println(f.Name())
 
 			db, err := gorm.Open(sqlite.Open(newPath), &gorm.Config{})
 			db.AutoMigrate(&Category{})

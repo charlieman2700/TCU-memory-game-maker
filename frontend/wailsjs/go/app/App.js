@@ -14,6 +14,10 @@ export function EraseCategory(arg1) {
   return window['go']['app']['App']['EraseCategory'](arg1);
 }
 
+export function IsDev() {
+  return window['go']['app']['App']['IsDev']();
+}
+
 export function LoadCategories(arg1, arg2) {
   return window['go']['app']['App']['LoadCategories'](arg1, arg2);
 }

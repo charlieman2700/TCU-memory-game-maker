@@ -14,11 +14,7 @@ import {
   EraseCategory,
   LoadCategories,
 } from "../../../wailsjs/go/app/App";
-
-type Category = {
-  ID: number;
-  Title: string;
-};
+import { Category } from "../../models";
 
 export const Categories = () => {
   const [page, setPage] = useState(1);
@@ -32,13 +28,12 @@ export const Categories = () => {
   const [categories, setCategories] = useState<Category[]>([]);
 
   const loadCategories = async () => {
-    const response = await LoadCategories(
+    const response = (await LoadCategories(
       rowsPerPage,
       (page - 1) * rowsPerPage,
-    );
-    const responseParsed: Category[] = await JSON.parse(response);
-    setCategories(responseParsed);
-    console.log("setted", categories);
+    )) as Category[];
+
+    setCategories(response);
   };
 
   const onNewCategory = async () => {
@@ -54,15 +49,13 @@ export const Categories = () => {
   };
 
   const handleEraseCategory = async (categoryId: number) => {
-    alert("asd")
+
     const response = await EraseCategory(categoryId);
     if (response != "OK") {
       return;
     }
     loadCategories();
   };
-  // const pages = Math.ceil(users.length / rowsPerPage);
-  //
 
   return (
     <AdminLayout title="Categories">
@@ -107,10 +100,11 @@ export const Categories = () => {
                 </Button>
               </TableCell>
               <TableCell>
-                <Button 
+                <Button
                   onClick={() => handleEraseCategory(category.ID)}
-
-                  size="sm" color="danger">
+                  size="sm"
+                  color="danger"
+                >
                   Erase
                 </Button>
               </TableCell>

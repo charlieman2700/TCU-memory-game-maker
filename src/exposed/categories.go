@@ -1,9 +1,10 @@
 package app
 
 import (
-	"encoding/json"
 	"fmt"
 	"tcu/src/database"
+
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 func (a *App) CreateNewCategory(title string) string {
@@ -22,38 +23,52 @@ func (a *App) CreateNewCategory(title string) string {
 	return fmt.Sprint(newCategory.ID)
 }
 
-func (a *App) LoadCategories(count int, skip int) string {
+func (a *App) LoadCategories(count int, skip int) ([]database.Category, error) {
 	db := database.GetDatabase()
 	if db == nil {
-		return "NO_DATABASE"
+
+		return nil, fmt.Errorf("NO_DATABASE")
 	}
 
 	var categories []database.Category
 	db.Limit(10).Offset(skip).Find(&categories)
 	//Return categories to client side here
-	fmt.Println(categories)
-
-	json, _ := json.Marshal(&categories)
-	fmt.Println(string(json))
-	return string(json)
-	// return "OK"
+	return categories, nil
 }
 
 func (a *App) EraseCategory(id int) string {
 	db := database.GetDatabase()
 	if db == nil {
+
+		runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
+			Type:    runtime.InfoDialog,
+			Title:   "Database Error",
+			Message: "Couldnt connect to database",
+		})
 		return "NO_DATABASE"
 	}
 
 	var category database.Category
 	db.First(&category, id)
 	if category.ID == 0 {
+
+		runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
+			Type:    runtime.InfoDialog,
+			Title:   "Database Error",
+			Message: "Category doesn't exist",
+		})
 		return "NO_CATEGORY"
 	}
 
 	db.Delete(&category)
 
 	if db.Error != nil {
+
+		runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
+			Type:    runtime.InfoDialog,
+			Title:   "Database Error",
+			Message: "Error Deleting Category",
+		})
 		return "ERROR_DELETING"
 	}
 
