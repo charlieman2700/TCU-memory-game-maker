@@ -13,6 +13,18 @@ func (a *App) CreateNewCategory(title string) string {
 		return "NO_DATABASE"
 	}
 
+	var category database.Category
+	db.Where("title = ?", title).First(&category)
+
+	if category.ID != 0 {
+		runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
+			Type:    runtime.InfoDialog,
+			Title:   "Database Error",
+			Message: "Category already exists",
+		})
+		return "CATEGORY_EXISTS"
+	}
+
 	newCategory := database.Category{Title: title}
 
 	result := db.Create(&newCategory)

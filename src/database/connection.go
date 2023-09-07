@@ -18,7 +18,7 @@ var database *gorm.DB
 
 func DevDatabase() {
 	if environment.DEV_ENV {
-		path := "./dev.db"
+		path := "dev.db"
 		_, error := os.Stat(path)
 
 		// check if error is "file not exists"
@@ -48,6 +48,7 @@ func CreateNewDatabase(path string) (*gorm.DB, error) {
 			if err != nil {
 				return nil, err
 			}
+			println(f.Name())
 			defer f.Close()
 
 			db, err := gorm.Open(sqlite.Open(newPath), &gorm.Config{})
