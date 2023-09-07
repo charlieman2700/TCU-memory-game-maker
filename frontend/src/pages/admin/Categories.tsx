@@ -8,7 +8,7 @@ import {
   TableRow,
   TableCell,
 } from "@nextui-org/react";
-import { useEffect, useState } from "react";
+import { EventHandler, useEffect, useState } from "react";
 import {
   CreateNewCategory,
   EraseCategory,
@@ -22,6 +22,7 @@ export const Categories = () => {
 
   useEffect(() => {
     loadCategories();
+    console.log("Re render");
   }, []);
 
   const [newCategory, setNewCategory] = useState("");
@@ -36,20 +37,16 @@ export const Categories = () => {
     setCategories(response);
   };
 
-  const onNewCategory = async () => {
-    console.log("asdf");
+  const handleCreateCategory = async () => {
     if (newCategory === "") {
       return;
     }
-    console.log(newCategory);
     const result = await CreateNewCategory(newCategory);
-    console.log(result);
     setNewCategory("");
     loadCategories();
   };
 
   const handleEraseCategory = async (categoryId: number) => {
-
     const response = await EraseCategory(categoryId);
     if (response != "OK") {
       return;
@@ -59,21 +56,18 @@ export const Categories = () => {
 
   return (
     <AdminLayout title="Categories">
-      <Input
-        value={newCategory}
-        aria-labelledby="Enter new Category name"
-        onChange={(e) => setNewCategory(e.target.value)}
-        type="text"
-        placeholder="Enter new Category name"
-      />
-      <Button
-        onClick={onNewCategory}
-        className="mt-2"
-        size="sm"
-        color="primary"
-      >
-        Add new category
-      </Button>
+      <form onSubmit={handleCreateCategory}>
+        <Input
+          value={newCategory}
+          aria-labelledby="Enter new Category name"
+          onChange={(e) => setNewCategory(e.target.value)}
+          type="text"
+          placeholder="Enter new Category name"
+        />
+        <Button type="submit" className="mt-2" size="sm" color="primary">
+          Add new category
+        </Button>
+      </form>
       <Table className="mt-4">
         <TableHeader>
           <TableColumn className="text-center">
