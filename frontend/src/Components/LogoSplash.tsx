@@ -3,8 +3,8 @@ import React, { FC } from "react";
 export const LogoSplash = () => {
   return (
     <svg
-      width="418.2"
-      height="173.84804907975462"
+      width="100%"
+      height="100%"
       viewBox="0 0 370.45454545454544 154"
     >
       <defs />

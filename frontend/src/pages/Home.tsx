@@ -1,24 +1,31 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { IsDev } from "../../wailsjs/go/app/App";
 import { LogoSplash } from "../Components/LogoSplash";
 
 export const Home = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const devMode = async () => {
+      const isDev = await IsDev();
+      if (isDev) {
+        navigate("/admin/games");
+      }
+    };
+    devMode();
+  }, []);
+
   return (
-    <div className="bg-secondary flex flex-col h-screen items-center justify-center">
-      <LogoSplash />
+    <div className="flex h-screen flex-col items-center justify-center bg-secondary">
+      <div className="w-96">
+        <LogoSplash />
+      </div>
       <Link
-        className="hover:cursor-pointer mt-4 text-white bg-cyan-800 w-[26rem]  py-1 text-center rounded "
+        className="mt-4 w-[24rem] rounded bg-cyan-800 py-1  text-center text-white transition-all hover:cursor-pointer hover:bg-cyan-500"
         to="/selectDatabase"
       >
         Start
       </Link>
-
-      {/* <img src={logo} id="logo" alt="logo"/> */}
-      {/* <div id="result" className="result">{resultText}</div> */}
-      {/* <div id="input" className="input-box"> */}
-      {/*     <input id="name" className="input" onChange={updateName} autoComplete="off" name="input" type="text"/> */}
-      {/*     <button className="btn" onClick={greet}>Greet</button> */}
-      {/* </div> */}
     </div>
   );
 };
