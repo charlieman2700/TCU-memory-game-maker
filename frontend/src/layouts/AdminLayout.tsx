@@ -14,7 +14,7 @@ export const AdminLayout: FC<Props> = (props) => {
 
       <div className=" flex flex-1  flex-col bg-gray-100 px-4 py-4">
         <div className="flex-1 rounded-2xl bg-gray-50 px-2 py-2 shadow-sm">
-          <h1 className="mb-2 text-3xl">{props.title}</h1>
+          <h1 className="mb-2 text-3xl font-bold">{props.title}</h1>
           {props.children}
         </div>
       </div>

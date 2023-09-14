@@ -10,6 +10,10 @@ export function CreateNewCategory(arg1) {
   return window['go']['app']['App']['CreateNewCategory'](arg1);
 }
 
+export function CreateNewGame(arg1, arg2) {
+  return window['go']['app']['App']['CreateNewGame'](arg1, arg2);
+}
+
 export function EditCategory(arg1, arg2) {
   return window['go']['app']['App']['EditCategory'](arg1, arg2);
 }
@@ -28,6 +32,10 @@ export function LoadCategories(arg1, arg2) {
 
 export function LoadCategoryName(arg1) {
   return window['go']['app']['App']['LoadCategoryName'](arg1);
+}
+
+export function LoadGames(arg1, arg2) {
+  return window['go']['app']['App']['LoadGames'](arg1, arg2);
 }
 
 export function SelectImageFolder() {

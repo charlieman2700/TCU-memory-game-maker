@@ -52,7 +52,7 @@ func CreateNewDatabase(path string) (*gorm.DB, error) {
 			defer f.Close()
 
 			db, err := gorm.Open(sqlite.Open(newPath), &gorm.Config{})
-			db.AutoMigrate(&Category{})
+			db.AutoMigrate(&Category{}, &Game{})
 
 			if err != nil {
 				panic("failed to connect database")

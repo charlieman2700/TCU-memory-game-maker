@@ -7,3 +7,9 @@ type Category struct {
 	Title       string
 	Description string
 }
+
+type Game struct {
+	gorm.Model
+	Title       string
+	Description string
+}

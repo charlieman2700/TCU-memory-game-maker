@@ -18,12 +18,9 @@ import { Category } from "../../../models";
 import { useNavigate } from "react-router-dom";
 
 export const Categories = () => {
-
-
   const [page, setPage] = useState(1);
   const rowsPerPage = 20;
   const navigate = useNavigate();
-  
 
   useEffect(() => {
     loadCategories();
@@ -52,8 +49,8 @@ export const Categories = () => {
   };
 
   const handleEditClick = (categoryId: number) => {
-    navigate(`edit/${categoryId}`)
-  }
+    navigate(`edit/${categoryId}`);
+  };
 
   const handleEraseCategory = async (categoryId: number) => {
     const response = await EraseCategory(categoryId);
@@ -65,18 +62,6 @@ export const Categories = () => {
 
   return (
     <AdminLayout title="Categories">
-      <form className="flex flex-col" onSubmit={handleCreateCategory}>
-        <Input
-          value={newCategory}
-          aria-labelledby="Enter new Category name"
-          onChange={(e) => setNewCategory(e.target.value)}
-          type="text"
-          placeholder="Enter new Category name"
-        />
-        <Button type="submit" className="mt-2 ml-auto " size="sm" color="primary">
-          Add new category
-        </Button>
-      </form>
       <Table className="mt-4">
         <TableHeader>
           <TableColumn className="text-center">
@@ -98,7 +83,11 @@ export const Categories = () => {
               <TableCell>{category.ID}</TableCell>
               <TableCell>{category.Title}</TableCell>
               <TableCell>
-                <Button onClick={()=>handleEditClick(category.ID)} size="sm" color="success">
+                <Button
+                  onClick={() => handleEditClick(category.ID)}
+                  size="sm"
+                  color="success"
+                >
                   Edit
                 </Button>
               </TableCell>
@@ -115,6 +104,23 @@ export const Categories = () => {
           ))}
         </TableBody>
       </Table>
+      <form className="mt-5 flex flex-col " onSubmit={handleCreateCategory}>
+        <Input
+          value={newCategory}
+          aria-labelledby="Enter new Category name"
+          onChange={(e) => setNewCategory(e.target.value)}
+          type="text"
+          placeholder="Enter new Category name"
+        />
+        <Button
+          type="submit"
+          className="ml-auto mt-2 "
+          size="md"
+          color="primary"
+        >
+          Add new category
+        </Button>
+      </form>
     </AdminLayout>
   );
 };
