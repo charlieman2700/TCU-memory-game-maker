@@ -10,17 +10,22 @@ export const NewGame = () => {
   const [newGameName, setNewGameName] = useState("");
   const [newGameDescription, setNewGameDescription] = useState("");
 
-  const handleCancelButton = () => {
+  function handleCancelButton() {
     navigate("../");
-  };
-  const handleCreateNewGame = () => {
-    //TODO: Implement create new game
+  }
 
-    
-    console.log(newGameName, newGameDescription)
+  async function handleCreateNewGame(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    let response = null;
+    try {
+      response = await CreateNewGame(newGameName, newGameDescription);
+    } catch (error) {
+      setNewGameName("");
+      return;
+    }
     setNewGameName("");
     setNewGameDescription("");
-  };
+  }
 
   return (
     <AdminLayout title="Games">

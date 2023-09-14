@@ -22,6 +22,10 @@ export function EraseCategory(arg1) {
   return window['go']['app']['App']['EraseCategory'](arg1);
 }
 
+export function EraseGame(arg1) {
+  return window['go']['app']['App']['EraseGame'](arg1);
+}
+
 export function IsDev() {
   return window['go']['app']['App']['IsDev']();
 }

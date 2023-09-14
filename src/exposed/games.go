@@ -7,10 +7,11 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
-func (a *App) CreateNewGame(title string, description string) string {
+func (a *App) CreateNewGame(title string, description string) (string, error) {
 	db := database.GetDatabase()
 	if db == nil {
-		return "NO_DATABASE"
+
+		return "", fmt.Errorf("NO_DATABASE")
 	}
 
 	var game database.Game
@@ -19,20 +20,22 @@ func (a *App) CreateNewGame(title string, description string) string {
 	if game.ID != 0 {
 		runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
 			Type:    runtime.InfoDialog,
-			Title:   "Game with	same title exitsts",
+			Title:   "Already used title",
 			Message: "Pls choose another title for the game",
 		})
-		return "GAME_EXISTS"
+		return "", fmt.Errorf("GAME_TITLE_EXISTS")
 	}
 
 	newGame := database.Game{Title: title, Description: description}
 
 	result := db.Create(&newGame)
 	if result == nil {
-		return "ERROR_CREATING"
+		return "", fmt.Errorf("ERROR_CREATING_GAME")
 	}
 
-	return fmt.Sprint(newGame.ID)
+	println(newGame.ID)
+
+	return fmt.Sprint(newGame.ID), nil
 }
 
 func (a *App) LoadGames(count int, skip int) ([]database.Game, error) {
@@ -47,44 +50,45 @@ func (a *App) LoadGames(count int, skip int) ([]database.Game, error) {
 	return games, nil
 }
 
-// func (a *App) EraseCategory(id int) string {
-// 	db := database.GetDatabase()
-// 	if db == nil {
-//
-// 		runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
-// 			Type:    runtime.InfoDialog,
-// 			Title:   "Database Error",
-// 			Message: "Couldnt connect to database",
-// 		})
-// 		return "NO_DATABASE"
-// 	}
-//
-// 	var category database.Category
-// 	db.First(&category, id)
-// 	if category.ID == 0 {
-//
-// 		runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
-// 			Type:    runtime.InfoDialog,
-// 			Title:   "Database Error",
-// 			Message: "Category doesn't exist",
-// 		})
-// 		return "NO_CATEGORY"
-// 	}
-//
-// 	db.Delete(&category)
-//
-// 	if db.Error != nil {
-//
-// 		runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
-// 			Type:    runtime.InfoDialog,
-// 			Title:   "Database Error",
-// 			Message: "Error Deleting Category",
-// 		})
-// 		return "ERROR_DELETING"
-// 	}
-//
-// 	return "OK"
-// }
+func (a *App) EraseGame(id uint) error {
+	db := database.GetDatabase()
+	if db == nil {
+
+		runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
+			Type:    runtime.InfoDialog,
+			Title:   "Database Error",
+			Message: "Couldn't connect to database",
+		})
+		return fmt.Errorf("NO_DATABASE")
+	}
+
+	var game database.Game
+	db.First(&game, id)
+	if game.ID == 0 {
+		runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
+			Type:    runtime.InfoDialog,
+			Title:   "Database Error",
+			Message: "Game doesn't exist",
+		})
+		return fmt.Errorf("Game doesn't exist")
+	}
+
+	db.Delete(&game)
+
+	if db.Error != nil {
+
+		runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
+			Type:    runtime.InfoDialog,
+			Title:   "Database Error",
+			Message: "Error deleting game",
+		})
+		return fmt.Errorf("ERROR_DELETING")
+	}
+
+	return nil
+
+}
+
 //
 // func (a *App) EditCategory(id uint, newTitle string) string {
 // 	db := database.GetDatabase()

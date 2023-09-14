@@ -9,8 +9,9 @@ import {
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { LoadGames } from "../../../../wailsjs/go/app/App";
+import { EraseGame, LoadGames } from "../../../../wailsjs/go/app/App";
 import { AdminLayout } from "../../../layouts/AdminLayout";
+import { cleanLongTexts } from "../../../utils";
 
 type Game = {
   ID: number;
@@ -37,20 +38,25 @@ export const Games = () => {
     )) as Game[];
 
     setGames(response);
-  };
+  }
 
-  function handleEraseGame(id: number) {
-    // TODO:  Implement erase game
-    console.log(id);
-  };
-  function handleEditGame(id: number) {
-        // TODO:  Implement edit game
-        console.log(id);
+  async function handleEraseGame(id: number) {
+    try {
+      await EraseGame(id);
+      loadGames();
+    } catch (error) {
+      console.log(error);
     }
+  }
+  function handleEditGame(id: number) {
+    // TODO:  Implement edit game
+    console.log(id);
+  }
 
   function handleAddGameButton() {
-        navigate("newGame");
-    }
+    navigate("newGame");
+  }
+
 
   return (
     <AdminLayout title="Games">
@@ -73,7 +79,7 @@ export const Games = () => {
           {games.map((game) => (
             <TableRow key={game.ID} className="text-center ">
               <TableCell>{game.Title}</TableCell>
-              <TableCell>{game.Description}</TableCell>
+              <TableCell>{cleanLongTexts(game.Description)}</TableCell>
               <TableCell>
                 <Button
                   onClick={() => handleEditGame(game.ID)}

@@ -12,6 +12,8 @@ export function EditCategory(arg1:number,arg2:string):Promise<string>;
 
 export function EraseCategory(arg1:number):Promise<string>;
 
+export function EraseGame(arg1:number):Promise<void>;
+
 export function IsDev():Promise<boolean>;
 
 export function LoadCategories(arg1:number,arg2:number):Promise<Array<database.Category>>;
