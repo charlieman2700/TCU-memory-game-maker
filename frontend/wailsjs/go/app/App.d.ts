@@ -6,7 +6,7 @@ export function CreateDatabase():Promise<string>;
 
 export function CreateNewCategory(arg1:string):Promise<string>;
 
-export function CreateNewGame(arg1:string,arg2:string):Promise<string>;
+export function CreateNewGame(arg1:string,arg2:string,arg3:Array<number>):Promise<string>;
 
 export function EditCategory(arg1:number,arg2:string):Promise<string>;
 

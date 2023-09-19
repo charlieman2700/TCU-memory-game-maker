@@ -12,4 +12,5 @@ type Game struct {
 	gorm.Model
 	Title       string
 	Description string
+	Categories  []Category `gorm:"many2many:game_categories;"`
 }

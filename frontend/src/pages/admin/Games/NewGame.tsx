@@ -1,37 +1,43 @@
-import {
-  Button,
-  Input,
-  Textarea,
-  Select,
-  SelectItem,
-  Chip,
-} from "@nextui-org/react";
+import { Button, Input, Textarea, SelectItem, Chip } from "@nextui-org/react";
+
+import { Select, Space } from "antd";
+import type { SelectProps } from "antd";
 import React from "react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   CreateNewGame,
   LoadAllCategories,
-  LoadCategories,
 } from "../../../../wailsjs/go/app/App";
 import { AdminLayout } from "../../../layouts/AdminLayout";
-import { Category } from "../../../models";
 
 export const NewGame = () => {
   const navigate = useNavigate();
 
   const [newGameName, setNewGameName] = useState("");
   const [newGameDescription, setNewGameDescription] = useState("");
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<SelectProps["options"]>();
+  const [selectedCategoriesIDs, setSelectedCategoriesIDs] = useState<number[]>(
+    [],
+  );
 
   useEffect(() => {
     getCategories();
-  });
+  }),
+    [];
   async function getCategories() {
     try {
-      const categories = await LoadAllCategories();
-      setCategories(categories);
+      const categoriesFromBE = await LoadAllCategories();
+      const temp: SelectProps["options"] = [];
+
+      for (let i = 0; i < categoriesFromBE.length; i++) {
+        const hello = categoriesFromBE[i];
+        temp.push({
+          label: hello.Title,
+          value: hello.ID,
+        });
+      }
+      setCategories(() => [...temp]);
     } catch (error) {
       console.log(error);
     }
@@ -43,15 +49,20 @@ export const NewGame = () => {
 
   async function handleCreateNewGame(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    let response = null;
     try {
-      response = await CreateNewGame(newGameName, newGameDescription);
+       await CreateNewGame(
+        newGameName,
+        newGameDescription,
+        selectedCategoriesIDs,
+      );
+      setNewGameName("");
+      setNewGameDescription("");
+      navigate("../");
+
     } catch (error) {
       setNewGameName("");
       return;
     }
-    setNewGameName("");
-    setNewGameDescription("");
   }
 
   return (
@@ -79,32 +90,15 @@ export const NewGame = () => {
         />
         <div className="mt-2">
           <Select
-            label="Category"
-            items={categories}
-            isMultiline={true}
-            labelPlacement="outside"
-            placeholder="Select a category"
-            selectionMode="multiple"
-            renderValue={(items) => {
-              return (
-                <div className="flex flex-wrap gap-2">
-                  {
-                    items.length === 0 ?
-                    <Chip>None</Chip>
-                    :
-                    items.map((item) => (
-                    <Chip key={item.data?.ID}>{item.data?.Title || "Unde"}</Chip>
-                  ))}
-                </div>
-              );
+            mode="multiple"
+            allowClear
+            options={categories}
+            placeholder="Select categories"
+            style={{ width: "100%" }}
+            onChange={(value) => {
+              setSelectedCategoriesIDs(value );
             }}
-          >
-            {categories.map((category) => (
-              <SelectItem key={category.ID} value={category.ID}>
-                {category.Title}
-              </SelectItem>
-            ))}
-          </Select>
+          />
         </div>
         <div className=" mt-5 flex  justify-end gap-2  ">
           <Button onClick={handleCancelButton} color="danger">

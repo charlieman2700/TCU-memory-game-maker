@@ -7,16 +7,16 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
-func (a *App) CreateNewGame(title string, description string) (string, error) {
+func (a *App) CreateNewGame(title string, description string, categories []uint) (string, error) {
 	db := database.GetDatabase()
 	if db == nil {
 
 		return "", fmt.Errorf("NO_DATABASE")
 	}
-
+	//
 	var game database.Game
 	db.Where("title = ?", title).First(&game)
-
+	//
 	if game.ID != 0 {
 		runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
 			Type:    runtime.InfoDialog,
@@ -25,15 +25,22 @@ func (a *App) CreateNewGame(title string, description string) (string, error) {
 		})
 		return "", fmt.Errorf("GAME_TITLE_EXISTS")
 	}
-
+	//
 	newGame := database.Game{Title: title, Description: description}
+	var categoriesFromDatabase []database.Category
+	db.Where("id IN (?)", categories).Find(&categoriesFromDatabase)
 
+	for _, category := range categoriesFromDatabase {
+		db.Model(&newGame).Association("Categories").Append(&category)
+
+	}
+	//
 	result := db.Create(&newGame)
 	if result == nil {
 		return "", fmt.Errorf("ERROR_CREATING_GAME")
 	}
 
-	println(newGame.ID)
+	db.Save(&newGame)
 
 	return fmt.Sprint(newGame.ID), nil
 }
@@ -73,7 +80,7 @@ func (a *App) EraseGame(id uint) error {
 		return fmt.Errorf("Game doesn't exist")
 	}
 
-	db.Delete(&game)
+	db.Unscoped().Delete(&game)
 
 	if db.Error != nil {
 

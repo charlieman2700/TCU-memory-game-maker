@@ -84,7 +84,7 @@ func (a *App) EraseCategory(id int) string {
 		return "NO_CATEGORY"
 	}
 
-	db.Delete(&category)
+	db.Unscoped().Delete(&category)
 
 	if db.Error != nil {
 

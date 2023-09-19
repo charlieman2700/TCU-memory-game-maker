@@ -65,9 +65,6 @@ export const Categories = () => {
       <Table className="mt-4">
         <TableHeader>
           <TableColumn className="text-center">
-            <span>ID</span>
-          </TableColumn>
-          <TableColumn className="text-center">
             <span>NAME</span>
           </TableColumn>
           <TableColumn className="text-center">
@@ -80,7 +77,6 @@ export const Categories = () => {
         <TableBody emptyContent="No categories">
           {categories.map((category) => (
             <TableRow key={category.ID} className="text-center ">
-              <TableCell>{category.ID}</TableCell>
               <TableCell>{category.Title}</TableCell>
               <TableCell>
                 <Button
