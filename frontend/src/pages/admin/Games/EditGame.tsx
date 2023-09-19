@@ -35,11 +35,9 @@ export const EditGame = () => {
         const cat = getCategories[i];
         temp.push(cat.ID);
       }
-      
+
       setSelectedCategoriesIDs(() => [...temp]);
       console.log(selectedCategoriesIDs);
-      
-
     } catch (error) {
       console.log(error);
     }
@@ -119,6 +117,7 @@ export const EditGame = () => {
           className="mt-2"
         />
         <div className="mt-2">
+          <span className="text-sm font-medium">Categories</span>
           <Select
             mode="multiple"
             value={selectedCategoriesIDs}

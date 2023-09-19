@@ -87,6 +87,8 @@ export const NewGame = () => {
           className="mt-2"
         />
         <div className="mt-2">
+          <span className="text-sm font-medium">Categories</span>
+
           <Select
             mode="multiple"
             allowClear
