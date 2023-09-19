@@ -30,6 +30,10 @@ export function IsDev() {
   return window['go']['app']['App']['IsDev']();
 }
 
+export function LoadAllCategories() {
+  return window['go']['app']['App']['LoadAllCategories']();
+}
+
 export function LoadCategories(arg1, arg2) {
   return window['go']['app']['App']['LoadCategories'](arg1, arg2);
 }

@@ -48,6 +48,18 @@ func (a *App) LoadCategories(count int, skip int) ([]database.Category, error) {
 	return categories, nil
 }
 
+func (a *App) LoadAllCategories() ([]database.Category, error) {
+	db := database.GetDatabase()
+	if db == nil {
+		return nil, fmt.Errorf("NO_DATABASE")
+	}
+
+	var categories []database.Category
+	db.Find(&categories)
+	//Return categories to client side here
+	return categories, nil
+}
+
 func (a *App) EraseCategory(id int) string {
 	db := database.GetDatabase()
 	if db == nil {
