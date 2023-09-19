@@ -15,7 +15,9 @@ export const EditCategory = () => {
   async function setInfo() {
     const id = Number(params.id);
     console.log(id);
-    setTitle(await LoadCategoryName(id));
+    const title = await LoadCategoryName(id);
+    setTitle(title);
+    setNewCategory(title);
     console.log(title);
   }
 
@@ -25,6 +27,10 @@ export const EditCategory = () => {
 
   const handleEditCategory = async () => {
     if (newCategory === "") {
+      return;
+    }
+    if(newCategory == title){
+      navigate("../")
       return;
     }
 

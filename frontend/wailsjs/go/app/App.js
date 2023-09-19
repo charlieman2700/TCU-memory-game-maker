@@ -18,12 +18,24 @@ export function EditCategory(arg1, arg2) {
   return window['go']['app']['App']['EditCategory'](arg1, arg2);
 }
 
+export function EditGame(arg1, arg2, arg3, arg4) {
+  return window['go']['app']['App']['EditGame'](arg1, arg2, arg3, arg4);
+}
+
 export function EraseCategory(arg1) {
   return window['go']['app']['App']['EraseCategory'](arg1);
 }
 
 export function EraseGame(arg1) {
   return window['go']['app']['App']['EraseGame'](arg1);
+}
+
+export function GetCategoriesFromGame(arg1) {
+  return window['go']['app']['App']['GetCategoriesFromGame'](arg1);
+}
+
+export function GetGameInfo(arg1) {
+  return window['go']['app']['App']['GetGameInfo'](arg1);
 }
 
 export function IsDev() {

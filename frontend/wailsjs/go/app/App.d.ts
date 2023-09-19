@@ -10,9 +10,15 @@ export function CreateNewGame(arg1:string,arg2:string,arg3:Array<number>):Promis
 
 export function EditCategory(arg1:number,arg2:string):Promise<string>;
 
+export function EditGame(arg1:number,arg2:string,arg3:string,arg4:Array<number>):Promise<database.Game>;
+
 export function EraseCategory(arg1:number):Promise<string>;
 
 export function EraseGame(arg1:number):Promise<void>;
+
+export function GetCategoriesFromGame(arg1:number):Promise<Array<database.Category>>;
+
+export function GetGameInfo(arg1:number):Promise<database.Game>;
 
 export function IsDev():Promise<boolean>;
 

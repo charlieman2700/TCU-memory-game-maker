@@ -98,55 +98,57 @@ func (a *App) EraseGame(id uint) error {
 
 }
 
-//
-// func (a *App) EditCategory(id uint, newTitle string) string {
-// 	db := database.GetDatabase()
-//
-// 	var category database.Category
-//
-// 	var categoryWithSameTitle database.Category
-//
-// 	db.Where("title = ?", newTitle).First(&categoryWithSameTitle)
-//
-// 	if categoryWithSameTitle.ID != 0 {
-// 		runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
-// 			Type:    runtime.InfoDialog,
-// 			Title:   "Database Error",
-// 			Message: "There is another category with the same title",
-// 		})
-// 		return "CATEGORY_EXISTS"
-// 	}
-//
-// 	db.First(&category, id)
-//
-// 	if category.ID == 0 {
-// 		runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
-// 			Type:    runtime.InfoDialog,
-// 			Title:   "Database Error",
-// 			Message: "Category doesn't exist",
-// 		})
-// 		return "ERROR_EDITING"
-// 	}
-//
-// 	category.Title = newTitle
-// 	db.Save(&category)
-// 	return "OK"
-// }
-//
-// func (a *App) LoadCategoryName(id int) string {
-// 	db := database.GetDatabase()
-//
-// 	var category database.Category
-// 	db.First(&category, id)
-// 	if category.ID == 0 {
-// 		runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
-// 			Type:    runtime.InfoDialog,
-// 			Title:   "Database Error",
-// 			Message: "Category doesn't exist",
-// 		})
-// 		return "ERROR_EDITING"
-// 	}
-//
-// 	return category.Title
-//
-// }
+func (a *App) GetGameInfo(id uint) (database.Game, error) {
+	db := database.GetDatabase()
+	if db == nil {
+		CantConnectToDatabaseMessage(a)
+	}
+
+	var game database.Game
+	db.First(&game, id)
+	if game.ID == 0 {
+		return game, fmt.Errorf("GAME_DOESNT_EXIST")
+	}
+
+	return game, nil
+}
+
+func (a *App) EditGame(id uint, title string, description string, categories []uint) (database.Game, error) {
+	db := database.GetDatabase()
+	if db == nil {
+		CantConnectToDatabaseMessage(a)
+	}
+
+	var game database.Game
+	db.First(&game, id)
+	if game.ID == 0 {
+		return game, fmt.Errorf("GAME_DOESNT_EXIST")
+	}
+
+	game.Title = title
+	game.Description = description
+
+	var categoriesFromDatabase []database.Category
+	db.Where("id IN (?)", categories).Find(&categoriesFromDatabase)
+
+	db.Model(&game).Association("Categories").Replace(categoriesFromDatabase)
+
+	return game, nil
+}
+
+func (a *App) GetCategoriesFromGame(id uint) ([]database.Category, error) {
+	db := database.GetDatabase()
+	if db == nil {
+		CantConnectToDatabaseMessage(a)
+	}
+	var game database.Game
+	db.First(&game, id)
+	if game.ID == 0 {
+		return nil, fmt.Errorf("GAME_DOESNT_EXIST")
+	}
+
+	var categories []database.Category
+	db.Model(&game).Association("Categories").Find(&categories)
+
+	return categories, nil
+}

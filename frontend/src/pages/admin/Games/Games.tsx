@@ -36,6 +36,7 @@ export const Games = () => {
       rowsPerPage,
       (page - 1) * rowsPerPage,
     )) as Game[];
+    //TODO: load categories
 
     setGames(response);
   }
@@ -49,8 +50,7 @@ export const Games = () => {
     }
   }
   function handleEditGame(id: number) {
-    // TODO:  Implement edit game
-    console.log(id);
+    navigate(`edit/${id}`);
   }
 
   function handleAddGameButton() {
@@ -69,6 +69,9 @@ export const Games = () => {
             <span>Description</span>
           </TableColumn>
           <TableColumn className="text-center">
+            <span>Categories</span>
+          </TableColumn>
+          <TableColumn className="text-center">
             <span>Edit</span>
           </TableColumn>
           <TableColumn className="text-center">
@@ -80,6 +83,7 @@ export const Games = () => {
             <TableRow key={game.ID} className="text-center ">
               <TableCell>{game.Title}</TableCell>
               <TableCell>{cleanLongTexts(game.Description)}</TableCell>
+              <TableCell className="italic font-bold">"ON DEV"</TableCell>
               <TableCell>
                 <Button
                   onClick={() => handleEditGame(game.ID)}

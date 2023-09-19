@@ -39,7 +39,8 @@ export const Categories = () => {
     setCategories(response);
   };
 
-  const handleCreateCategory = async () => {
+  const handleCreateCategory = async (e:any) => {
+    e.preventDefault();
     if (newCategory === "") {
       return;
     }

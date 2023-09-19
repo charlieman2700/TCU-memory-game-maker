@@ -1,29 +1,60 @@
-import { Button, Input, Textarea, SelectItem, Chip } from "@nextui-org/react";
-
-import { Select, Space } from "antd";
-import type { SelectProps } from "antd";
-import React from "react";
+import { Input, Button, Textarea } from "@nextui-org/react";
+import { Select, SelectProps } from "antd";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
-  CreateNewGame,
+  GetGameInfo,
   LoadAllCategories,
+  EditGame as EditGameBE,
+  GetCategoriesFromGame,
 } from "../../../../wailsjs/go/app/App";
 import { AdminLayout } from "../../../layouts/AdminLayout";
 
-export const NewGame = () => {
-  const navigate = useNavigate();
+export const EditGame = () => {
+  const params = useParams();
 
-  const [newGameName, setNewGameName] = useState("");
+  const [gameTitle, setGameTitle] = useState("");
   const [newGameDescription, setNewGameDescription] = useState("");
   const [categories, setCategories] = useState<SelectProps["options"]>();
   const [selectedCategoriesIDs, setSelectedCategoriesIDs] = useState<number[]>(
     [],
   );
 
+  const navigator = useNavigate();
   useEffect(() => {
     getCategories();
+    getGameInformation();
+    getCategoriesFromGame();
   }, []);
+
+  async function getCategoriesFromGame() {
+    try {
+      const getCategories = await GetCategoriesFromGame(Number(params.id));
+      const temp: number[] = [];
+      for (let i = 0; i < getCategories.length; i++) {
+        const cat = getCategories[i];
+        temp.push(cat.ID);
+      }
+      
+      setSelectedCategoriesIDs(() => [...temp]);
+      console.log(selectedCategoriesIDs);
+      
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function getGameInformation() {
+    try {
+      const gameInfo = await GetGameInfo(Number(params.id));
+      setGameTitle(gameInfo.Title);
+      setNewGameDescription(gameInfo.Description);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async function getCategories() {
     try {
       const categoriesFromBE = await LoadAllCategories();
@@ -43,38 +74,39 @@ export const NewGame = () => {
   }
 
   function handleCancelButton() {
-    navigate("../");
+    navigator("../");
   }
 
-  async function handleCreateNewGame(event: React.FormEvent<HTMLFormElement>) {
+  async function handleEditGame(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
-      await CreateNewGame(
-        newGameName,
+      await EditGameBE(
+        Number(params.id),
+        gameTitle,
         newGameDescription,
         selectedCategoriesIDs,
       );
-      setNewGameName("");
+      setGameTitle("");
       setNewGameDescription("");
-      navigate("../");
+      navigator("../");
     } catch (error) {
-      setNewGameName("");
+      setGameTitle("");
       return;
     }
   }
 
   return (
     <AdminLayout title="Games">
-      <h1 className="text-2xl font-semibold">New Game</h1>
+      <h1 className="text-2xl font-semibold">Edit Game</h1>
 
-      <form className="mt-2 flex flex-col " onSubmit={handleCreateNewGame}>
+      <form className="mt-2 flex flex-col " onSubmit={handleEditGame}>
         <Input
           isRequired={true}
           label="Title"
           labelPlacement="outside"
-          value={newGameName}
+          value={gameTitle}
           aria-labelledby="Enter new game title"
-          onValueChange={setNewGameName}
+          onValueChange={setGameTitle}
           type="text"
           placeholder="Enter new Category name"
         />
@@ -89,6 +121,7 @@ export const NewGame = () => {
         <div className="mt-2">
           <Select
             mode="multiple"
+            value={selectedCategoriesIDs}
             allowClear
             options={categories}
             placeholder="Select categories"
@@ -103,7 +136,7 @@ export const NewGame = () => {
             Cancel
           </Button>
           <Button type="submit" color="primary">
-            Add new Game
+            Edit Game
           </Button>
         </div>
       </form>

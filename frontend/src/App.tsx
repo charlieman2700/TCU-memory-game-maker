@@ -8,6 +8,7 @@ import { Categories, EditCategory } from "./pages/admin/Categories/index";
 
 import { Games } from "./pages/admin/Games/Games";
 import { NewGame } from "./pages/admin/Games/NewGame";
+import { EditGame } from "./pages/admin/Games/EditGame";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="games">
             <Route path="" element={<Games />} />
             <Route path="newGame" element={<NewGame />} />
+            <Route path="edit/:id" element={<EditGame />} />
           </Route>
           <Route path="categories">
             <Route path="" element={<Categories />} />

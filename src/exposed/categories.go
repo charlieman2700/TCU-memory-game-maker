@@ -103,6 +103,7 @@ func (a *App) EraseCategory(id int) string {
 		return "CATEGORY_ASSOCIATED_WITH_GAMES"
 	}
 
+	db.Model(&category).Association("Games").Clear()
 	db.Unscoped().Delete(&category)
 
 	if db.Error != nil {
