@@ -80,6 +80,7 @@ func (a *App) EraseGame(id uint) error {
 		return fmt.Errorf("Game doesn't exist")
 	}
 
+	db.Model(&game).Association("Categories").Clear()
 	db.Unscoped().Delete(&game)
 
 	if db.Error != nil {
@@ -89,6 +90,7 @@ func (a *App) EraseGame(id uint) error {
 			Title:   "Database Error",
 			Message: "Error deleting game",
 		})
+		db.Commit()
 		return fmt.Errorf("ERROR_DELETING")
 	}
 

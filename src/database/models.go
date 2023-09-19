@@ -1,15 +1,14 @@
 package database
 
-import "gorm.io/gorm"
-
 type Category struct {
-	gorm.Model
+	ID          uint `gorm:"primaryKey"`
 	Title       string
 	Description string
+	Games       []Game `gorm:"many2many:game_categories;"`
 }
 
 type Game struct {
-	gorm.Model
+	ID          uint `gorm:"primaryKey"`
 	Title       string
 	Description string
 	Categories  []Category `gorm:"many2many:game_categories;"`

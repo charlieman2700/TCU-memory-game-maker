@@ -84,6 +84,25 @@ func (a *App) EraseCategory(id int) string {
 		return "NO_CATEGORY"
 	}
 
+	var gamesAssiciated []database.Game
+
+	db.Model(&category).Association("Games").Find(&gamesAssiciated)
+
+	if len(gamesAssiciated) > 0 {
+		gamesTitles := ""
+		for _, game := range gamesAssiciated {
+			gamesTitles += "'" + game.Title + "'" + ", "
+		}
+		gamesTitles = gamesTitles[:len(gamesTitles)-2]
+
+		runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
+			Type:    runtime.InfoDialog,
+			Title:   "Unable to delete category",
+			Message: "This category is associated with: " + gamesTitles + " game(s). Please remove the association before deleting this category",
+		})
+		return "CATEGORY_ASSOCIATED_WITH_GAMES"
+	}
+
 	db.Unscoped().Delete(&category)
 
 	if db.Error != nil {
