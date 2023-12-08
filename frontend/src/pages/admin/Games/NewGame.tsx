@@ -49,14 +49,14 @@ export const NewGame = () => {
   async function handleCreateNewGame(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
-      await CreateNewGame(
+      const newGameID = await CreateNewGame(
         newGameName,
         newGameDescription,
         selectedCategoriesIDs,
       );
       setNewGameName("");
       setNewGameDescription("");
-      navigate("../");
+      navigate("../edit/" + newGameID);
     } catch (error) {
       setNewGameName("");
       return;

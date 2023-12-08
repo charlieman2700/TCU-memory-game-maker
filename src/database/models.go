@@ -12,4 +12,14 @@ type Game struct {
 	Title       string
 	Description string
 	Categories  []Category `gorm:"many2many:game_categories;"`
+	Pairs       []Pair
+}
+
+type Pair struct {
+	ID          uint `gorm:"primaryKey"`
+	GameID      uint
+	FirstType   string
+	SecondType  string
+	FirstImage  string
+	SecondImage string
 }

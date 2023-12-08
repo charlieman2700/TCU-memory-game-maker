@@ -2,15 +2,15 @@ package app
 
 import (
 	"fmt"
-	"tcu/src/database"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
+
+	"tcu/src/database"
 )
 
 func (a *App) CreateNewGame(title string, description string, categories []uint) (string, error) {
 	db := database.GetDatabase()
 	if db == nil {
-
 		return "", fmt.Errorf("NO_DATABASE")
 	}
 	//
@@ -32,7 +32,6 @@ func (a *App) CreateNewGame(title string, description string, categories []uint)
 
 	for _, category := range categoriesFromDatabase {
 		db.Model(&newGame).Association("Categories").Append(&category)
-
 	}
 	//
 	result := db.Create(&newGame)
@@ -52,8 +51,10 @@ func (a *App) LoadGames(count int, skip int) ([]database.Game, error) {
 	}
 
 	var games []database.Game
-	db.Limit(10).Offset(skip).Find(&games)
-	//Return categories to client side here
+	// db.Limit(10).Offset(skip).Find(&games).Preload("Categories")
+	// db.Model(&database.Game{}).Preload("Categories").Find(&games).Limit(10)
+	db.Preload("Categories").Find(&games)
+	// Return categories to client side here
 	return games, nil
 }
 
@@ -95,7 +96,6 @@ func (a *App) EraseGame(id uint) error {
 	}
 
 	return nil
-
 }
 
 func (a *App) GetGameInfo(id uint) (database.Game, error) {
@@ -113,7 +113,12 @@ func (a *App) GetGameInfo(id uint) (database.Game, error) {
 	return game, nil
 }
 
-func (a *App) EditGame(id uint, title string, description string, categories []uint) (database.Game, error) {
+func (a *App) EditGame(
+	id uint,
+	title string,
+	description string,
+	categories []uint,
+) (database.Game, error) {
 	db := database.GetDatabase()
 	if db == nil {
 		CantConnectToDatabaseMessage(a)
@@ -127,6 +132,7 @@ func (a *App) EditGame(id uint, title string, description string, categories []u
 
 	game.Title = title
 	game.Description = description
+	db.Save(&game)
 
 	var categoriesFromDatabase []database.Category
 	db.Where("id IN (?)", categories).Find(&categoriesFromDatabase)

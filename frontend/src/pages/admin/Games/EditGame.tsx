@@ -2,6 +2,11 @@ import { Input, Button, Textarea } from "@nextui-org/react";
 import { Select, SelectProps } from "antd";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { FilePond, registerPlugin } from "react-filepond";
+import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
+import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+import "filepond/dist/filepond.min.css";
 import {
   GetGameInfo,
   LoadAllCategories,
@@ -10,8 +15,11 @@ import {
 } from "../../../../wailsjs/go/app/App";
 import { AdminLayout } from "../../../layouts/AdminLayout";
 
+registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
+
 export const EditGame = () => {
   const params = useParams();
+  const [files, setFiles] = useState<any>([]);
 
   const [gameTitle, setGameTitle] = useState("");
   const [newGameDescription, setNewGameDescription] = useState("");
@@ -128,6 +136,39 @@ export const EditGame = () => {
             onChange={(value) => {
               setSelectedCategoriesIDs(value);
             }}
+          />
+        </div>
+        <div>
+          <FilePond
+            files={files}
+            onupdatefiles={setFiles}
+            allowMultiple={false}
+            server={{
+              process: (
+                fieldName,
+                file,
+                metadata,
+                load,
+                error,
+                progress,
+                abort,
+                transfer,
+                options,
+              ) => {
+                console.log(file);
+                progress(true, 100, 100);
+                 
+
+
+                return {
+                  abort: () => {
+                    console.log("aborted");
+                  },
+                };
+              },
+            }}
+            name="files" /* sets the file input name, it's filepond by default */
+            labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
           />
         </div>
         <div className=" mt-5 flex  justify-end gap-2  ">

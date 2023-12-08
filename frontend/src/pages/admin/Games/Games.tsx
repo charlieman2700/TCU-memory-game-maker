@@ -13,10 +13,16 @@ import { EraseGame, LoadGames } from "../../../../wailsjs/go/app/App";
 import { AdminLayout } from "../../../layouts/AdminLayout";
 import { cleanLongTexts } from "../../../utils";
 
+const maxVisibleCategoriesCount = 3;
+type Category = {
+  Title: string;
+};
+
 type Game = {
   ID: number;
   Title: string;
   Description: string;
+  Categories: Category[];
 };
 
 export const Games = () => {
@@ -36,7 +42,8 @@ export const Games = () => {
       rowsPerPage,
       (page - 1) * rowsPerPage,
     )) as Game[];
-    //TODO: load categories
+
+    console.log(response);
 
     setGames(response);
   }
@@ -57,6 +64,22 @@ export const Games = () => {
     navigate("newGame");
   }
 
+  function renderCategories(game: Game) {
+    if (game.Categories.length === 0) {
+      return "";
+    }
+    let categoriesText = game.Categories[0].Title;
+
+    for (
+      let index = 1;
+      index < game.Categories.length || index === maxVisibleCategoriesCount;
+      index++
+    ) {
+      categoriesText += ", " + game.Categories[index].Title;
+    }
+
+    return categoriesText;
+  }
 
   return (
     <AdminLayout title="Games">
@@ -83,7 +106,15 @@ export const Games = () => {
             <TableRow key={game.ID} className="text-center ">
               <TableCell>{game.Title}</TableCell>
               <TableCell>{cleanLongTexts(game.Description)}</TableCell>
-              <TableCell className="italic font-bold">"ON DEV"</TableCell>
+              <TableCell>
+                {game.Categories.length === 0 ? (
+                  <span className="italic text-gray-400">No Categories</span>
+                ) : (
+                  <span className="text-gray-600">
+                    {renderCategories(game)}
+                  </span>
+                )}
+              </TableCell>
               <TableCell>
                 <Button
                   onClick={() => handleEditGame(game.ID)}
