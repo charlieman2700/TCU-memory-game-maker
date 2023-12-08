@@ -78,6 +78,10 @@ export const Games = () => {
       categoriesText += ", " + game.Categories[index].Title;
     }
 
+    if (game.Categories.length > 3) {
+      categoriesText += "...";
+    }
+
     return categoriesText;
   }
 
