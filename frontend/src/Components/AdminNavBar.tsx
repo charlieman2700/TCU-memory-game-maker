@@ -24,8 +24,8 @@ const NavLink = ({ children, to }: NavLinkProps) => {
 
 export const AdminNavBar = () => {
   return (
-    <div className="flex h-14 items-center  bg-secondary">
-      <div className="ml-4 w-20 ">
+    <div className="sticky top-0 z-10 flex h-14 items-center  bg-secondary">
+      <div className="ml-4 w-16 ">
         <Link to="/selectMode">
           <svg
             width="100%"
@@ -45,7 +45,7 @@ export const AdminNavBar = () => {
           </svg>
         </Link>
       </div>
-      <div className="flex gap-4">
+      <div className=" ml-4 flex gap-4">
         <NavLink to="/admin/games">Games</NavLink>
         <NavLink to="/admin/categories">Categories</NavLink>
       </div>

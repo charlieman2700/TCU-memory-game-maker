@@ -67,7 +67,10 @@ export const NewGame = () => {
     <AdminLayout title="Games">
       <h1 className="text-2xl font-semibold">New Game</h1>
 
-      <form className="mt-2 flex flex-col " onSubmit={handleCreateNewGame}>
+      <form
+        className="mt-2 flex flex-1 flex-col  "
+        onSubmit={handleCreateNewGame}
+      >
         <Input
           isRequired={true}
           label="Title"
@@ -100,7 +103,17 @@ export const NewGame = () => {
             }}
           />
         </div>
-        <div className=" mt-5 flex  justify-end gap-2  ">
+        <div className="mt-2 ">
+          <span className="text-sm font-medium">Cards</span>
+          <div className="mx-2 mb-2 flex flex-wrap gap-10 bg-sky-300 px-2 py-2">
+            {Array.from({ length: 8 }, (_, index) => (
+              <div key={index} className="h-40 w-40 rounded  bg-gray-600">
+                {/* Content for each grid item */}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className=" sticky bottom-2  mb-2 mt-auto flex justify-end gap-2  align-bottom ">
           <Button onClick={handleCancelButton} color="danger">
             Cancel
           </Button>
