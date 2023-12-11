@@ -1,7 +1,7 @@
 import { redirect, useNavigate } from "react-router-dom";
-import { CreateDatabase, SetDatabase } from "../../wailsjs/go/app/App";
-import { Button } from "../Components/Button";
-import { LogoSplash } from "../Components/LogoSplash";
+import { CreateDatabase, SetDatabase } from "../../../wailsjs/go/app/App";
+import { Button } from "../../Components/Button";
+import { LogoSplash } from "../../Components/LogoSplash";
 
 //
 export const SelectDatabase = () => {

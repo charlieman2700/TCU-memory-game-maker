@@ -1,6 +1,6 @@
-import { Button } from "../Components/Button";
-import { SelectImageFolder as SIF } from "../../wailsjs/go/app/App";
-import { LogoSplash } from "../Components/LogoSplash";
+import { Button } from "../../Components/Button";
+import { SelectImageFolder as SIF } from "../../../wailsjs/go/app/App";
+import { LogoSplash } from "../../Components/LogoSplash";
 import { useNavigate } from "react-router-dom";
 
 export const SelectImageFolder = () => {

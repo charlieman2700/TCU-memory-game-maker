@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { IsDev } from "../../wailsjs/go/app/App";
-import { LogoSplash } from "../Components/LogoSplash";
+import { IsDev } from "../../../wailsjs/go/app/App";
+import { LogoSplash } from "../../Components/LogoSplash";
 
 export const Home = () => {
   const navigate = useNavigate();
