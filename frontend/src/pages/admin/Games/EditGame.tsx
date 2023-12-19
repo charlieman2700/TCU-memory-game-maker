@@ -28,6 +28,12 @@ export const EditGame = () => {
     [],
   );
 
+  const manageFileUpdate = (he: any) => {
+    console.log(he);
+
+    setFiles(he);
+  };
+
   const navigator = useNavigate();
   useEffect(() => {
     getCategories();
@@ -139,12 +145,18 @@ export const EditGame = () => {
           />
         </div>
         <div>
+          {/* Crear los metodos load, remove, .... que serviran para establecer un
+comportamiento personalizado a las diferetnes etapas del procesamiento que utiliza filepond
+
+La idea es establecer conexiones a diferentes metodos expuestos de wails (Hay que crearlos tambine)
+que nos permitiran guardar la imagen en la base de datos
+
+*/}
           <FilePond
             files={files}
-            onupdatefiles={setFiles}
             allowMultiple={false}
             server={{
-              process: (
+              process: async (
                 fieldName,
                 file,
                 metadata,
@@ -156,13 +168,15 @@ export const EditGame = () => {
                 options,
               ) => {
                 console.log(file);
+                console.log(progress);
+                //Aca tengo los bytes de la imagen
+                const a = await file.text();
+                console.log("bytes", a);
+
                 progress(true, 100, 100);
-                 
-
-
                 return {
                   abort: () => {
-                    console.log("aborted");
+                    abort();
                   },
                 };
               },

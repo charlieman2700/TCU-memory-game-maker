@@ -16,10 +16,12 @@ type Game struct {
 }
 
 type Pair struct {
-	ID          uint `gorm:"primaryKey"`
-	GameID      uint
-	FirstType   string
-	SecondType  string
-	FirstImage  string
-	SecondImage string
+	ID     uint `gorm:"primaryKey"`
+	GameID uint
+	Word   string
+}
+
+type TempImage struct {
+	ID    uint `gorm:"primaryKey"`
+	Bytes []byte
 }
