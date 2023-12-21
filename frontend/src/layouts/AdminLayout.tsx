@@ -12,7 +12,7 @@ export const AdminLayout: FC<Props> = (props) => {
     <div className="flex min-h-screen flex-col overscroll-none">
       <AdminNavBar />
 
-      <div className=" flex flex-1  flex-col bg-gray-100 px-32 py-4">
+      <div className=" flex flex-1  flex-col bg-gray-100 px-2 py-4 md:px-32">
         <div className="flex flex-1 flex-col  rounded-lg  bg-white px-2 py-2 shadow-sm">
           <h1 className="mb-2 text-3xl font-bold">{props.title}</h1>
           {props.children}

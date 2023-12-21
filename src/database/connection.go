@@ -52,7 +52,7 @@ func CreateNewDatabase(path string) (*gorm.DB, error) {
 			defer f.Close()
 
 			db, err := gorm.Open(sqlite.Open(newPath), &gorm.Config{})
-			db.AutoMigrate(&Category{}, &Game{}, &Pair{})
+			db.AutoMigrate(&Category{}, &Game{}, &Pair{}, &TempImage{})
 
 			if err != nil {
 				panic("failed to connect database")
@@ -71,6 +71,7 @@ func CreateNewDatabase(path string) (*gorm.DB, error) {
 func LoadDatabase(path string) *gorm.DB {
 
 	if database == nil {
+
 		lock.Lock()
 		defer lock.Unlock()
 		if database == nil {
@@ -80,6 +81,7 @@ func LoadDatabase(path string) *gorm.DB {
 				panic("failed to connect database")
 			}
 			database = db
+			db.AutoMigrate(&Category{}, &Game{}, &Pair{}, &TempImage{})
 
 		} else {
 			fmt.Println("Single instance already created.")

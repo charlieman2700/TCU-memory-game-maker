@@ -23,5 +23,6 @@ type Pair struct {
 
 type TempImage struct {
 	ID    uint `gorm:"primaryKey"`
+	Type  string
 	Bytes []byte
 }

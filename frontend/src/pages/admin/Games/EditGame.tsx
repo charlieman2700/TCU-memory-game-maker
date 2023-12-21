@@ -12,6 +12,8 @@ import {
   LoadAllCategories,
   EditGame as EditGameBE,
   GetCategoriesFromGame,
+  AddTempImage,
+  LoadTempImage,
 } from "../../../../wailsjs/go/app/App";
 import { AdminLayout } from "../../../layouts/AdminLayout";
 
@@ -40,6 +42,11 @@ export const EditGame = () => {
     getGameInformation();
     getCategoriesFromGame();
   }, []);
+
+  interface TempImage {
+    type: string;
+    bytes: Uint8Array;
+  }
 
   async function getCategoriesFromGame() {
     try {
@@ -156,6 +163,43 @@ que nos permitiran guardar la imagen en la base de datos
             files={files}
             allowMultiple={false}
             server={{
+              load: async (source, load, error, progress, abort, headers) => {
+                // Should request a file object from the server here
+                // Call golang for a file
+                // ...
+                const tempImage = (await LoadTempImage(source)) as TempImage;
+                console.log("TEmpIma", tempImage);
+
+                // Create a Blob from Uint8Array
+                const blob = new Blob([tempImage.bytes], {
+                  type: tempImage.type,
+                });
+
+                // Can call the error method if something is wrong, should exit after
+                error("oh my goodness");
+
+                // Can call the header method to supply FilePond with early response header string
+                // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/getAllResponseHeaders
+
+                // Should call the progress method to update the progress to 100% before calling load
+                // (endlessMode, loadedSize, totalSize)
+                progress(true, 0, 1024);
+
+                // Should call the load method with a file object or blob when done
+                // load(file);
+                load(blob);
+
+                // Should expose an abort method so the request can be cancelled
+                return {
+                  abort: () => {
+                    // User tapped cancel, abort our ongoing actions here
+
+                    // Let FilePond know the request has been cancelled
+                    abort();
+                  },
+                };
+              },
+
               process: async (
                 fieldName,
                 file,
@@ -170,8 +214,11 @@ que nos permitiran guardar la imagen en la base de datos
                 console.log(file);
                 console.log(progress);
                 //Aca tengo los bytes de la imagen
-                const a = await file.text();
-                console.log("bytes", a);
+                const buffer = await file.arrayBuffer();
+                const text = await file.text();
+                const u = new Uint8Array(buffer);
+                await AddTempImage(text, file.type);
+                // console.log("bytes", `[{$u.}]`);
 
                 progress(true, 100, 100);
                 return {
